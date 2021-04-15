@@ -6,12 +6,12 @@ use super::{
 };
 #[derive(Debug, Default, Bundle)]
 pub struct CommonCameraBundle {
-    move_speed: CameraMoveSpeed,
-    zoom_speed: CameraZoomSpeed,
+    pub move_speed: CameraMoveSpeed,
+    pub zoom_speed: CameraZoomSpeed,
 }
 #[derive(Debug, Bundle, Default)]
 pub struct MainCameraBundle {
     #[bundle]
-    common_camera: CommonCameraBundle,
-    main_camera: MainCamera,
+    pub common_camera: CommonCameraBundle,
+    pub main_camera: MainCamera,
 }
