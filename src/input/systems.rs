@@ -1,5 +1,6 @@
 use super::{
     data_components::{CameraMoveSpeed, CameraZoomLimit, CameraZoomSpeed},
+    events::MouseDragEvent,
     marker_components::MainCamera,
     resources::MouseWorldPosition,
 };
@@ -101,6 +102,42 @@ pub fn zoom_in_camera_with_mouse_scroll(
                 transform.scale + offset * camera_speed.speed * time.delta_seconds();
             new_scale = new_scale.clamp(camera_zoom_limit.max_zoom, camera_zoom_limit.min_zoom);
             transform.scale = new_scale;
+        }
+    }
+}
+pub fn track_middle_mouse_dragging(
+    mouse_input: Res<Input<MouseButton>>,
+    mut dragging: Local<bool>,
+    mut last_position: Local<Vec2>,
+    mouse_position: Res<MouseWorldPosition>,
+    mut mouse_drag_event_writer: EventWriter<MouseDragEvent>,
+) {
+    if *dragging {
+        if mouse_input.just_released(MouseButton::Middle) {
+            *dragging = false;
+        }
+        let movement_vector = mouse_position.position - *last_position;
+        mouse_drag_event_writer.send(MouseDragEvent { movement_vector });
+        *last_position = mouse_position.position;
+    } else {
+        if mouse_input.just_pressed(MouseButton::Middle) {
+            *dragging = true;
+            *last_position = mouse_position.position;
+        }
+    }
+}
+pub fn move_camera_with_middle_mouse_drag(
+    mut query: Query<&mut Transform, With<MainCamera>>,
+    mut mouse_drag_event_reader: EventReader<MouseDragEvent>,
+) {
+    if let Some(drag_event) = mouse_drag_event_reader.iter().next() {
+        let inverted = drag_event.movement_vector * -1.0;
+        if let Ok(mut camera_transform) = query.single_mut() {
+            if inverted.length() > 10.0 {
+                camera_transform.translation = camera_transform
+                    .translation
+                    .lerp(camera_transform.translation + inverted.extend(0.0), 0.4);
+            }
         }
     }
 }
