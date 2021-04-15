@@ -1,12 +1,9 @@
 use super::{
-    data_components::{CameraMoveSpeed, CameraZoomSpeed},
+    data_components::{CameraMoveSpeed, CameraZoomLimit, CameraZoomSpeed},
     marker_components::MainCamera,
     resources::MouseWorldPosition,
 };
-use bevy::{
-    input::{keyboard::KeyboardInput, mouse::MouseWheel},
-    prelude::*,
-};
+use bevy::{input::mouse::MouseWheel, prelude::*};
 
 ///A function to get mouse position in world coords
 ///
@@ -36,12 +33,29 @@ pub fn get_mouse_world_position(
 }
 ///A function to move the camera with the W,A,S,D keys
 pub fn move_camera_with_wasd(
-    mut keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<Input<KeyCode>>,
     mut query: Query<(&mut Transform, &CameraMoveSpeed), With<MainCamera>>,
     time: Res<Time>,
 ) {
     if let Ok((mut transform, camera_speed)) = query.single_mut() {
         translate_by_wasd(&mut transform, &keyboard_input, camera_speed.speed, time);
+    }
+}
+///Move the camera with the W,A,S,D keys, scaled by the camera's zoom
+pub fn move_camera_with_wasd_scaled_by_zoom(
+    keyboard_input: Res<Input<KeyCode>>,
+    mut query: Query<(&mut Transform, &CameraMoveSpeed, &CameraZoomLimit), With<MainCamera>>,
+    time: Res<Time>,
+) {
+    if let Ok((mut transform, camera_speed, camera_zoom_limit)) = query.single_mut() {
+        let dist_from_max = transform.scale.y - camera_zoom_limit.max_zoom.y;
+        let percent = dist_from_max / (camera_zoom_limit.min_zoom.y - camera_zoom_limit.max_zoom.y);
+        translate_by_wasd(
+            &mut transform,
+            &keyboard_input,
+            camera_speed.speed * f32::max(0.15, percent),
+            time,
+        );
     }
 }
 ///Translates the entity with the W,A,S,D keys
@@ -73,19 +87,19 @@ pub fn translate_by_wasd(
 }
 pub fn zoom_in_camera_with_mouse_scroll(
     mut mouse_wheel_events: EventReader<MouseWheel>,
-    mut query: Query<(&mut Transform, &CameraZoomSpeed), With<MainCamera>>,
+    mut query: Query<(&mut Transform, &CameraZoomSpeed, &CameraZoomLimit), With<MainCamera>>,
     time: Res<Time>,
 ) {
     //TODO: Maybe have a resource that says whether to invert the y
     for ev in mouse_wheel_events.iter() {
-        if let Ok((mut transform, camera_speed)) = query.single_mut() {
+        if let Ok((mut transform, camera_speed, camera_zoom_limit)) = query.single_mut() {
             //invert the scroll wheel's Y
             let inverted_y_scale = -1.0 * ev.y;
             //The Scale's offset should be the same on both x and y
             let offset = Vec3::new(inverted_y_scale, inverted_y_scale, 0.0);
             let mut new_scale =
                 transform.scale + offset * camera_speed.speed * time.delta_seconds();
-            new_scale = new_scale.clamp(Vec3::new(0.05, 0.05, 1.0), Vec3::new(1.0, 1.0, 1.0));
+            new_scale = new_scale.clamp(camera_zoom_limit.max_zoom, camera_zoom_limit.min_zoom);
             transform.scale = new_scale;
         }
     }
