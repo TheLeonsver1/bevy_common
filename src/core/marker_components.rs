@@ -1,12 +1,12 @@
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct MainCamera;
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Player;
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Actor;
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct UiRoot;
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct NewGameButton;
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct LoadGameButton;
