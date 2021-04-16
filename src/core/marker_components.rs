@@ -1,3 +1,5 @@
+use super::bundles::MainCameraBundle;
+///A marker that gets added in the [MainCameraBundle](MainCameraBundle)
 #[derive(Debug, Default)]
 pub struct MainCamera;
 #[derive(Debug, Default)]
