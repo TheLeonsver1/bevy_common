@@ -1,0 +1,12 @@
+[package]
+name = "bevy_common_map"
+version = "0.1.0"
+authors = ["Leon <sverdleon@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bevy_common_core ={version="0.1.0", path="../bevy_common_core"} 
+bevy_common_input = {version="0.1.0", path="../bevy_common_input"}
+bevy ="0.5"

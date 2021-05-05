@@ -8,3 +8,7 @@ edition = "2018"
 
 [dependencies]
 bevy="0.5"
+bevy_common_core = {version="0.1.0", path="crates/bevy_common_core"} 
+bevy_common_input = {version="0.1.0", path="crates/bevy_common_input"}
+bevy_common_map = {version="0.1.0", path="crates/bevy_common_map"}
+bevy_common_ecs_tilemap = {version="0.1.0", path="crates/bevy_common_ecs_tilemap"}

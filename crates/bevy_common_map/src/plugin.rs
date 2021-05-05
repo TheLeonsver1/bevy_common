@@ -1,6 +1,6 @@
-use super::input::plugin::PlayerInputPlugin;
 use super::{events::*, systems::*};
 use bevy::prelude::*;
+use bevy_common_input::plugin::PlayerInputPlugin;
 pub struct NotTileMapPlugin;
 impl Plugin for NotTileMapPlugin {
     fn build(&self, app: &mut AppBuilder) {

@@ -1,8 +1,9 @@
 use super::{
     data_components::RectFromTransform, events::PressedOnEntity, marker_components::Pickable,
 };
-use crate::{core::marker_components::MainCamera, input::resources::MouseWorldPosition};
 use bevy::prelude::*;
+use bevy_common_core::marker_components::MainCamera;
+use bevy_common_input::resources::MouseWorldPosition;
 
 ///A naive 2d solution for mouse picking, based on rects
 pub fn clicked_pickable_entity_system(

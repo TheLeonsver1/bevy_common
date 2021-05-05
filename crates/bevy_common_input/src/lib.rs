@@ -3,4 +3,4 @@ pub mod events;
 pub mod plugin;
 pub mod resources;
 pub mod systems;
-pub use super::core::*;
+pub use bevy_common_core::*;
