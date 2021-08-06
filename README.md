@@ -5,7 +5,7 @@ I do not recommend setting this lib as a dependency.
 
 ## License
 
-BevyCommon is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0).
+BevyCommon is primarily distributed under the terms of either the MIT license or the Apache License (Version 2.0).
 
 See [LICENSE-APACHE](LICENSE-APACHE), [LICENSE-MIT](LICENSE-MIT), and
 [COPYRIGHT](COPYRIGHT) for details.
