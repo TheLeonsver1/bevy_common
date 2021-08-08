@@ -8,4 +8,4 @@ edition = "2018"
 
 [dependencies]
 bevy_common_core ={version="0.1.0", path="../bevy_common_core"} 
-bevy = "0.5"
+bevy = { git = "https://github.com/bevyengine/bevy.git", branch="main"}
